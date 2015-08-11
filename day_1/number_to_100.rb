@@ -8,7 +8,6 @@ while number >= 100
   number = gets.to_i
 end
 
-
 for x in number..100
   puts x
 end
