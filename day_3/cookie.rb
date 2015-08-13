@@ -11,6 +11,24 @@ class Cookie
     @flour_amount = flour_amount
   end
 
+  # this is a public method that returns the instance variable @sugar_amount
+  # this is called a GETTER mehtod
+  # def sugar_amount
+  #   @sugar_amount
+  # end
+  attr_reader :sugar_amount
+
+  # this is a public method that sets the instance variable @sugar_amount
+  # this is called a SETTER method
+  # def sugar_amount=(new_amount)
+  #   @sugar_amount = new_amount
+  # end
+  attr_writer :sugar_amount
+
+  # attr_reader :flour_amount
+  # attr_writer :flour_amount
+  attr_accessor :flour_amount
+
   # Playing with class variables
   # def set_color(color)
   #   @@color = color
