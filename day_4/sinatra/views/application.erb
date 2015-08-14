@@ -1,0 +1,22 @@
+<!-- This is a layout file -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>My First Sinatra Application</title>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <a href="/">Home</a>
+        |
+        <a href="/contact">Contact Us</a>
+        |
+        <a href="/convert_temp">Covert Temperature</a>
+      </nav>
+    </header>
+    <hr>
+    <%# the yield will get replaced by the contact of each template that is using this layout. For instance the content of index.erb will be injected in place of this `yield` %>
+    <%= yield %>
+  </body>
+</html>
