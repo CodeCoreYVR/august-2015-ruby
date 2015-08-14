@@ -6,10 +6,31 @@ require "sinatra/reloader" if development?
 
 require "faker"
 
+# this allows using the sessions feature in Sinatra
+enable :sessions
+
+helpers do
+  def protected!
+    return if authorized?
+    headers['WWW-Authenticate'] = 'Basic realm="Restricted Area"'
+    halt 401, "Not authorized\n"
+  end
+
+  def authorized?
+    @auth ||=  Rack::Auth::Basic::Request.new(request.env)
+    @auth.provided? and @auth.basic? and @auth.credentials and @auth.credentials == ['admin', 'admin']
+  end
+end
+
 # When we recieve a request that has a GET HTTP request
 # with a URL of "/"
 # Sinatra will execute the code in here
 get "/" do
+  if session[:visits]
+    session[:visits] += 1
+  else
+    session[:visits] = 1
+  end
   # the response is just a simple text that is sent back
   # "Hello World"
 
@@ -90,5 +111,18 @@ end
 post "/pick_random" do
   @names  = params[:names]
   @winner = @names.split(",").sample
+  session[:the_last_winner] = @winner
   erb :pick_random, layout: :application
+end
+
+get "/test_protected" do
+  protected!
+  "You're In!"
+end
+
+# this action will be invoked with any url that matches
+# /color/WHATEVER. e.g. /color/red /color/blue /color/something
+get "/color/:name" do
+  session[:bg_color] = params[:name]
+  redirect back
 end

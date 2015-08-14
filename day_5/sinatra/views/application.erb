@@ -4,6 +4,11 @@
   <head>
     <meta charset="utf-8">
     <title>My First Sinatra Application</title>
+    <style>
+      body {
+        background-color: <%= session[:bg_color] %>;
+      }
+    </style>
   </head>
   <body>
     <header>
@@ -19,6 +24,14 @@
         <a href="/company">Company Catch Phrase</a>
         |
         <a href="/pick_random">Pick Winner</a>
+        <a href="/color/red">Red</a>
+        <a href="/color/blue">Blue</a>
+        <a href="/color/white">White</a>
+        <a href="/color/yellow">Yellow</a>
+        |
+        The last Winner was: <%= session[:the_last_winner] %>
+        |
+        You have visited home page: <%= session[:visits] %> time(s)
       </nav>
     </header>
     <hr>
