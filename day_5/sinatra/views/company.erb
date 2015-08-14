@@ -1,0 +1,7 @@
+<form action="/company" method="post">
+  <input type="submit" value="Generate Company Catch Phrase">
+</form>
+
+<% if @gen %>
+  <div style="height: 20px; width: 200px; background-color: red"><%= @gen %></div>
+<% end %>

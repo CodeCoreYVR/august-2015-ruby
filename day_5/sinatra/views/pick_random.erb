@@ -1,0 +1,8 @@
+<h1>Pick a Random Winnder</h1>
+<form action="/pick_random" method="post">
+  <textarea name="names" rows="8" cols="40"><%= @names %></textarea>
+  <input type="submit" name="name" value="Pick Winner">
+</form>
+<% if @winner %>
+  The Winner is: <%= @winner %>
+<% end %>

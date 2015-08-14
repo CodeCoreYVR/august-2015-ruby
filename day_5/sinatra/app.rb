@@ -4,6 +4,8 @@ require "sinatra"
 # http://www.sinatrarb.com/contrib/reloader.html
 require "sinatra/reloader" if development?
 
+require "faker"
+
 # When we recieve a request that has a GET HTTP request
 # with a URL of "/"
 # Sinatra will execute the code in here
@@ -70,4 +72,23 @@ post "/survey" do
   # "Thank you for submitting the survey. You're Type is: #{type} - #{params.to_s}"
 
   erb :survey_results, layout: :application
+end
+
+get "/company" do
+  erb :company, layout: :application
+end
+
+post "/company" do
+  @gen = Faker::Company.catch_phrase
+  erb :company, layout: :application
+end
+
+get "/pick_random" do
+  erb :pick_random, layout: :application
+end
+
+post "/pick_random" do
+  @names  = params[:names]
+  @winner = @names.split(",").sample
+  erb :pick_random, layout: :application
 end
