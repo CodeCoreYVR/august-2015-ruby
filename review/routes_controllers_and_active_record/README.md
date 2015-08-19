@@ -10,6 +10,7 @@ We just created an app without any tests that uses PostgreSQL for its database. 
   
 Now, let's start out by creating a root route, a `/contacts` route to handle GET requests, and a `/contacts` route to handle POST requests.  
   
+## Routes
 ```ruby
 # config/routes.rb
 Rails.applicatoin.routes.draw do
@@ -19,4 +20,75 @@ Rails.applicatoin.routes.draw do
   post "/contacts" => "contacts#create"
 end
 ```
-Now, if we want to check out our app to make sure that the routes are working, we'll need to first run `bin/rake db:create` to create our database. Then, we can run `bin/rails server` and checkout [localhost:3000](http://localhost:3000/rails/info/routes).
+Now, if we want to check out our app to make sure that the routes are working, we'll need to first run `bin/rake db:create` to create our database. Then, we can run `bin/rails server` and checkout [localhost:3000](http://localhost:3000/rails/info/routes).  
+  
+## Controllers
+We have a couple of options for creating our controllers. We could run
+`bin/rails generate controller home_controller` which will create a
+bunch of files for us
+```
+$ bin/rails generate controller home_controller
+      create  app/controllers/home_controller_controller.rb
+      invoke  erb
+      create    app/views/home_controller
+      invoke  helper
+      create    app/helpers/home_controller_helper.rb
+      invoke  assets
+      invoke    coffee
+      create      app/assets/javascripts/home_controller.coffee
+      invoke    scss
+      create      app/assets/stylesheets/home_controller.scss
+```
+Or, we could just create our controller manually. Either way, we are going to want to add a `lol` action to handle our root route.
+```ruby
+# app/controllers/home_controller.rb
+
+class HomeController < ApplicationController
+  def lol
+  end
+end
+```
+Because we have inherited from the ApplicationController, Rails will see the empty action `lol` and look for a `lol` file under `app/views/home/`, so let's make sure if finds one.
+```sh
+mkdir app/views/home
+touch app/views/home/lol.html.erb
+```
+```erb
+<% # app/views/home/lol.html.erb %>
+<h1>LOL</h1>
+```
+Let's add site navigation! Open up the application layout and add a couple of links for [home](http://localhost:3000) and [contacts](http://localhost:3000/contacts).
+```erb
+<% # app/views/layouts/application.html.erb %>
+<!DOCTYPE html
+<html>
+<head>
+  <title>RoutesControllersAndActiveRecord</title>
+  <%= stylesheet_link_tag    'application', media: 'all',
+'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' =>
+true %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+  <%= link_to "home", root_path %> | 
+  <%= link_to "new contact", contacts_path %>
+  <%= yield %>
+</body>
+</html>
+```
+Great! Now that we have some links, we can navigate! But, we don't have a contacts controller, yet. So, let's make one.
+```ruby
+# app/controllers/contacts_controller.rb
+
+class ContactsController < ApplicationController
+  def new
+    render text: "Make a new contact!"
+  end
+
+  def create
+    render text: "Thanks for creating a new contact"
+  end
+end
+```
+
