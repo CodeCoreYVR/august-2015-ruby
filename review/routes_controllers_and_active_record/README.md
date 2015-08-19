@@ -91,4 +91,28 @@ class ContactsController < ApplicationController
   end
 end
 ```
+## ActiveRecord
+Let's go ahead and create a Contact model. We can use rails to generate it for us. Notice how `rails generage model contact name:string email_address:string` creates a model file and a migration for us?  
+  
+The model is quite simple looking, as its methods are inherited from `ActiveRecord::Base`
+```ruby
+class Contact < ActiveRecord::Base
+end
+```
+The migration file has all the information needed to create the contacts table in the database. We will need to run a `bin/rake db:migrate` to make this happen.
+```ruby
+class CreateContacts < ActiveRecord::Migration
+  def change
+    create_table :contacts do |t|
+      t.string :name
+      t.string :email_address
 
+      t.timestamps null: false
+    end
+  end
+end
+end
+```
+You'll notice that before running `bin/rake db:migrate`, we do not have a `db/schema.rb` file. Go ahead and run your migration, then checkout what the schema file looks like.  
+  
+The schema file is the recipe for creating your app's database!
