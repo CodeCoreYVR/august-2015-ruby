@@ -1,0 +1,88 @@
+body {
+  background: url("images/confectionary.png");
+  margin: 0;
+}
+a {
+  color: rgba(255,0,0,0.5);
+  font-size: 19px;
+  text-decoration: underline;
+}
+
+img {
+  /*width: 200px;*/
+  width: 25%;
+  border: 2px solid #00ff00;
+  /*border-top: 2px solid;*/
+  border-radius: 50%;
+  opacity: 0.8;
+}
+
+div {
+  text-align: right;
+  width: 100%;
+  background-color: #103f00;
+}
+
+#bolded {
+  font-weight: bold;
+}
+
+.done {
+  text-decoration: line-through;
+}
+
+.important {
+  color: #ff0000;
+}
+
+li.important {
+  font-size: 20px;
+}
+
+p.important {
+  text-transform: uppercase;
+}
+
+ul li {
+  color: #00ff00 !important;
+}
+
+#item-1 {
+  color: purple;
+}
+
+ol li {
+  color: #0000ff;
+}
+
+/* this styles a <p> element that has a class `abc` and an id `xyz`*/
+p.abc#xyz {
+
+}
+/* this styles all the <p> elements nested within a div that has a class special */
+div.special p {
+
+}
+
+/* this styles all the li elements nested with a ul element that has a class speical */
+ul.special li {
+
+}
+
+
+.box {
+  width: 500px;
+  height: 300px;
+  background-color: #ff0000;
+  border:5px solid #0000ff;
+  /* TRBL: Top Right Bottom Left */
+  /*margin-top: 50px;*/
+  margin: 10px 20px 30px 40px;
+  padding: 40px;
+}
+
+.inner-box {
+  width: 100%;
+  height: 100%;
+  background-color: yellow;
+}

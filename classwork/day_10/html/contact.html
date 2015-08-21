@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Contact Us</title>
+  </head>
+  <body>
+    <header>
+      <a href="index.html">Home</a>
+    </header>
+    <hr>
+    <h1>Contact Us</h1>
+    <form action="" method="post">
+      <div>
+        <!-- add a 'for' option to the label tag makes it focus
+             the element whose id matches the value for the `for` attribute -->
+        <label for="first-name">First Name</label>
+        <input type="text" id="first-name" placeholder="e.g. John">
+      </div>
+      <div>
+        <label for="last-name">Last Name</label>
+        <input type="text" id="last-name" placeholder="e.g. Smith">
+      </div>
+      <div>
+        <input type="radio" id="technical" name="department">
+        <label for="technical">Technical</label>
+
+        <input type="radio" id="marketing" name="department">
+        <label for="marketing">Marketing</label>
+
+        <input type="radio" id="sales" name="department">
+        <label for="sales">Sales</label>
+      </div>
+      <div>
+        <input type="checkbox" id="urgent">
+        <label for="urgent">Urgent?</label>
+      </div>
+      <div>
+        <label for="category">Category</label>
+        <select id="category">
+          <option>Art</option>
+          <option>Sports</option>
+          <option>Technology</option>
+          <option>Cats</option>
+        </select>
+      </div>
+      <div>
+        <label for="message">Message</label>
+        <textarea id="message" rows="5"></textarea>
+      </div>
+      <div>
+        <input type="submit">
+      </div>
+    </form>
+  </body>
+</html>
