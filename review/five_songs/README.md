@@ -22,6 +22,17 @@ song.save
 song.id
 => 1
 ```
+Let's add a scope to our song model to get just the most recent five songs.
+```ruby
+class Song < ActiveRecord::Base
+  scope :recent, ->(x) { order('updated_at ASC').limit(x) }
+  scope :recent_five, -> { order('updated_at ASC').limit(5) }
+
+  def self.recent(x)
+    order('updated_at ASC').limit(x)
+  end
+end
+```
 ## Add Gems
 Open up the Gemfile and let's add bootstrap-sass and hirb.
 ``` ruby
@@ -37,4 +48,42 @@ Then run `bundle install` to install the gems and add a scss file for importing 
 // app/assets/stylesheets/bootstrap_and_css_overrides.scss
 @import 'bootstrap'
 ```
+## Add some Views
+Let's add the two (actually four) view files that we are going to use: `app/views/songs/index.html.erb`, `app/views/songs/new.html.erb`  
+  
+Our index view is going to list the 5 most recently added or updated songs.
+```erb
+<% # app/views/songs/index.html.erb %>
+<table class="table table-striped">
+  <tr>
+    <th>Title</th>
+    <th>Video Link</th>
+  </tr>
+    <% @songs..each do |song| %>
+      <tr>
+        <td><%= song.title %></td>
+        <td><%= link_to "#{song.title}", song.video_link %><td>
+      </tr>
+    <% end %>
+</table>
+```
+## Routes
+If we add `resources :songs` to our routes file, it adds a bunch of routes for us.  
+  
+Let's just add a route to view our songs index.
+```ruby
+root "songs#index"
+resources :songs, only: [:index]
+```
 
+## Controller
+Now that we have a model and a view, we need a controller to serve up the view
+```ruby
+# app/controllers/songs_controller.rb
+
+class SongsController < Application_Controller
+  def index
+    @songs = Song.recent_five
+  end
+end
+```
