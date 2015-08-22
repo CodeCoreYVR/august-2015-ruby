@@ -22,4 +22,19 @@ song.save
 song.id
 => 1
 ```
+## Add Gems
+Open up the Gemfile and let's add bootstrap-sass and hirb.
+``` ruby
+# Gemfile
+
+# ...
+gem 'bootstrap-sass', '~> 3.3.5'
+gem 'hirb'
+# ...
+```
+Then run `bundle install` to install the gems and add a scss file for importing bootstrap.
+```scss
+// app/assets/stylesheets/bootstrap_and_css_overrides.scss
+@import 'bootstrap'
+```
 
