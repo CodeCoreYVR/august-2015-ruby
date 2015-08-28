@@ -140,3 +140,37 @@ And a view with a form.
 
 <% end %>
 ```
+## One to Many (Albums have many Songs)
+Let's add an album model that `has_many` songs. This means, we are going to change songs to `belong_to` albums.  
+  
+We'll start out by creating a new branch for our new feature work, and generating a model
+  
+```shell
+git checkout -b add-feature-albums
+rails generate model album name:string
+```
+Open up the album model and add the `has_many :songs` relation
+```ruby
+class Album < ActiveRecord::Base
+  has_many :songs
+end
+```
+Then run a `bin/rake db:migrate`, and let's think about the next migration we want to make.  
+  
+We want to add a new column to our songs table to store `album_id`.  
+  
+```shell
+rails generate migration add_album_references_to_songs album:references
+```
+And migrate the changes with `bin/rake db:migrate`  
+  
+Don't forget to add `belongs_to :album` to your song model
+```ruby
+# app/models/song.rb
+
+class Song < ActiveRecord::Base
+  belongs_to :album
+
+  scope :recent_five, -> { order('created_at DESC').limit(5) }
+end
+```
