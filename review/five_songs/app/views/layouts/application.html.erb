@@ -7,8 +7,9 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-
-<%= yield %>
+  <%= link_to 'home', root_path %>
+  <%= link_to 'new song', new_song_path %>
+  <%= yield %>
 
 </body>
 </html>

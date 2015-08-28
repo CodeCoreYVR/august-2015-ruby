@@ -87,3 +87,56 @@ class SongsController < Application_Controller
   end
 end
 ```
+## Add New Songs
+We want to be able to add new songs. To do this, we'll need a route, controller actions for new and create, and a view with a form.  
+  
+Let's start by adding `:new`, and `:create` to our routes resource
+```ruby
+# config/routes.rb
+
+# ...
+  resources :songs, only: [:index, :new, :create]
+# ...
+```
+Let's add the new, and create actions our controller before working on the form view.
+```ruby
+# app/controllers/songs_controller.rb
+
+class SongsController < ApplicationController
+  def index
+    @songs = Song.recent_five
+  end
+
+  def new
+    @song = @Song.new
+  end
+
+  def create
+    @song = Song.new(params.require(:song).permit([:title, :video_link]))
+    if @song.save
+      redirect_to :songs_path
+    else
+      render :new
+    end
+  end
+end
+```
+And a view with a form.
+```erb
+<% # app/views/songs/new.html.erb %>
+
+<h1>Add a Song</h1>
+
+<%= form_for @song do |f| %>
+  <div class="form-group">
+    <%= f.label :title %>
+    <%= f.text_field :title, class: "form-control" %>
+  </div>
+  <div class="form-group">
+    <%= f.label :video_link %>
+    <%= f.text_field :video_link, class "form-controller" %>
+  </div>
+  <%= f.submit class: "btn btn default" %>
+
+<% end %>
+```
