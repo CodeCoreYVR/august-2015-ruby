@@ -1,6 +1,6 @@
 # Rails Review (One to Many)
 Let's create a new rails app to practice one to many relations.
-```
+```sh
 rails new one_to_many -T -d postgresql
 cd one_to_many
 ```  
@@ -24,27 +24,27 @@ Guest.where("hotel_id = ?" 1)
 ```
 Hmm... If we choose one, how would the other look? For example, if we say that hotels have a `guest_id` (meaning, hotels _belong to_ guests), how do we find all guests who stayed at a particular hotel?  
   
-```
+```sh
 ???
 ```
 Now, what if we choose the other way, guests _belong to_ hotels. How would we perform that same query?
-```
+```sh
 hotel = Hotel.last
 hotel.guests
 ```
 Let's try with the other query. How would we query 'all hotels a particular guest has stayed in?  
   
 If we don't have a `guest_id` field in hotels, which makes sense, because how would other hotels keep track of a guest's id? Maybe by guest email address? Sure, but we could just use `hotel_id`.
-```
+```sh
 Guest.where("hotel_id = ?", 1)
 ```
 Let's build it out and play around with it.
-```
+```sh
 rails generate resource hotel name:string location:string rooms:string
 rails generate resource guest name:string email:string hotel:references
 ```
 Open up the hotel model, and add `has_many :guests`
-```
+```ruby
 # app/models/hotel.rb
 class Hotel < ActiveRecord::Base
   has_many :guests
@@ -53,7 +53,7 @@ end
 and run `bin/rake db:create db:migrate`  
   
 Now that we have a one to many relation in our database, let's hop into `bin/rails console` and make some records!
-```
+```sh
 bin/rails console
 Hirb.enable
 
@@ -67,7 +67,7 @@ guest.save
 Cool. Now, let's think about the front end. What routes do we want to have? We should be able to create and view hotels. Since guests belong to hotel, we should be able to add hotel guests.  
   
 Let's add index, new, and create routes, controller actions, and appropriate views.
-```
+```ruby
 # config/routes.rb
 Rails.application.routes.draw do
   root "hotels#index"
@@ -75,7 +75,7 @@ Rails.application.routes.draw do
 end
 ```
 This gives us the routes we need to view all hotels, and create a hotel. Let's add the controller and views!
-```
+```rb
 # app/controllers/hotels_controller.rb
 class HotelsController < ApplicationController
   def index
@@ -108,7 +108,7 @@ Now, we need to create a couple of views for new, and index. Let's start with th
 </ul>
 ```
 And let's add a form to create new hotels
-```
+```erb
 <% # app/views/hotels/new.html.erb %>
 
 <h1>Add a New Hotel</h1>
@@ -134,7 +134,7 @@ Rails.application.routes.draw do
 end
 ```
 Instantiate the hotel in o show action in the hotels controller
-```
+```rb
 # app/controller/hotels_controller.rb
 class HotelsController < ApplicationController
   def index
@@ -179,7 +179,7 @@ Take a moment to think about each of these links, and _where_ they
 should live.  
   
 Let's start with the "new hotel" link. We may want to create a new hotel from anywhere on the site, so it makes sense to add it to the application layout.
-```
+```erb
 <% # app/views/layouts/application.html.erb %>
 
 <!DOCTYPE html>
@@ -214,4 +214,65 @@ Let's start with the "new hotel" link. We may want to create a new hotel from an
 *note*: we could also have written our link to like this:
 ```ruby
 link_to hotel.name, hotel
+```
+Now, we want to add a way to add guests. What should the route look like? Should it have any params? What do we need to know when creating a new guest?  
+  
+Since we want the `hotel_id`, and we've set up our associations, we can create our guest with `@hotel.guests.new` in the create action in the `guests_controller`, which means we will want to find the hotel.  
+  
+Let's make new, and create routes for guest, nested under hotels.
+```ruby
+# config/routes.rb
+
+Rails.application.routes.draw do
+  root "hotels#index"
+  resources :hotels, only: [:index, :new, :create, :show] do
+    resources :guests, only: [:new, :create]
+  end
+end
+```
+Let's add a link to our hotels show view.
+```erb
+<% # app/views/hotels/show.html.erb %>
+
+<h1><%= @hotel.name %></h1>
+<p><%= @hotel.location %>, rooms: <%= @hotel.rooms %></p>
+
+<h2>Guests</h2>
+<hr>
+<p><%= link_to "add guest", new_hotel_guest_path(@hotel.id) %><p>
+<ul>
+  <% @hotel.guests.each do |guest| %>
+    <li><%= guest.name %></li>
+  <% end %>
+</ul>
+```
+Now, we'll need a new action in our guests controller and a new view with a form for adding guests.
+```ruby
+class GuestsController < ActiveRecord::Base
+  def new
+    @hotel = Hotel.find(params[:hotel_id]
+    @guest = Guest.new
+  end
+
+  def create
+    @hotel = Hotel.find(params[:hotel_id]
+    @guest = @hotel.guests.new(params.require(:guest).permit([:name, :email]))
+    if @guest.save
+      redirect_to @hotel
+    else
+      render :new
+    end
+  end
+end
+```
+```erb
+<H1>Add new Guest for <%= @hotel %></h1>
+
+<%= form_for [@hotel, @guest] do |f| %>
+  <%= f.label :name %>
+  <%= f.text_field :name %><br>
+  <%= f.label :email %>
+  <%= f.text_field :email %><br>
+  <%= f.submit %>
+<% end %>
 ```

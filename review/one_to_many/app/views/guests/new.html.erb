@@ -1,0 +1,9 @@
+<H1>Add new Guest for <%= @hotel.name %></h1>
+
+<%= form_for [@hotel, @guest] do |f| %>
+  <%= f.label :name %>
+  <%= f.text_field :name %><br>
+  <%= f.label :email %>
+  <%= f.text_field :email %><br>
+  <%= f.submit %>
+<% end %>
