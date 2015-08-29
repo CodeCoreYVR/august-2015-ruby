@@ -1,4 +1,4 @@
 Rails.application.routes.draw do
-  resources :guests
-  resources :hotels
+  root "hotels#index"
+  resources :hotels, only: [:index, :new, :create, :show]
 end

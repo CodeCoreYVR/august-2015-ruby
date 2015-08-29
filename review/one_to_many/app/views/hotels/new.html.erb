@@ -1,0 +1,11 @@
+<h1>Add a New Hotel</h1>
+
+<%= form_for @hotel do |f|  %>
+  <%= f.label :name %>
+  <%= f.text_field :name %><br>
+  <%= f.label :location %>
+  <%= f.text_field :location %><br>
+  <%= f.label :rooms %>
+  <%= f.text_field :rooms %><br>
+  <%= f.submit %>
+<% end %>
