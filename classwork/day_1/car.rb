@@ -1,4 +1,4 @@
-print "Please enter the year of your car"
+print "Please enter the year your car was made in"
 
 year = gets.to_i
 
